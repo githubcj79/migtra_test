@@ -26,17 +26,46 @@ def walking_json(json_file_name='./data/data2.json'):
 	with open(json_file_name) as json_file:
 		_list = json.load(json_file)
 
-	print(f"{type(_list)}")
+	# print(f"{type(_list)}")
+
+	A_waiting_seconds = 0
+	A_waiting_show_ups = 0
+
+	B_waiting_seconds = 0
+	B_waiting_show_ups = 0
 
 	for record in _list:
-		pass
+		# El promedio de tiempo de espera en zonas A
+		if record["zone"] in ["AE1", "AE2"]:
+			A_waiting_show_ups += 1
+			A_waiting_seconds += seconds_elapsed(from_str_to_datetime(record["dt_in"]), 
+												from_str_to_datetime(record["dt_out"]))
+
+		# El promedio de tiempo de espera en zonas B
+		if record["zone"] in ["BE1", "BE2"]:
+			B_waiting_show_ups += 1
+			B_waiting_seconds += seconds_elapsed(from_str_to_datetime(record["dt_in"]), 
+												from_str_to_datetime(record["dt_out"]))
+
+	# print(f"{A_waiting_show_ups} {A_waiting_seconds}")
+	A_waiting_average = float(A_waiting_seconds) / A_waiting_show_ups
+	# print(f"{A_waiting_average} seconds")
+
+	# print(f"{B_waiting_show_ups} {B_waiting_seconds}")
+	B_waiting_average = float(B_waiting_seconds) / B_waiting_show_ups
+	# print(f"{B_waiting_average} seconds")
+
+	return A_waiting_average, B_waiting_average
 
 def main():
-	# walking_json()
-	# from_str_to_datetime()
-	date_1 = from_str_to_datetime("2019-01-01T00:05:59")
-	date_2 = from_str_to_datetime("2019-01-01T00:08:55")
-	print(f"seconds elapsed: {seconds_elapsed(date_1, date_2)}")
+
+	# date_1 = from_str_to_datetime("2019-01-01T00:05:59")
+	# date_2 = from_str_to_datetime("2019-01-01T00:08:55")
+	# print(f"seconds elapsed: {seconds_elapsed(date_1, date_2)}")
+
+	A_waiting_average, B_waiting_average = walking_json()
+	print(f"{A_waiting_average} seconds")
+	print(f"{B_waiting_average} seconds")
 
 
 if __name__ == '__main__':
