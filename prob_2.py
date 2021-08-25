@@ -26,16 +26,17 @@ def walking_json(json_file_name='./data/data2.json'):
 	with open(json_file_name) as json_file:
 		_list = json.load(json_file)
 
-	# print(f"{type(_list)}")
-
 	A_waiting_seconds = 0
 	A_waiting_show_ups = 0
 	B_waiting_seconds = 0
 	B_waiting_show_ups = 0
 
+	F_show_ups = 0
+	F_total_seconds = 0
+
 	# to count the total cycles
 	# key <- cycle
-	# value <- True if área de trabajo tipo 2, False initial value
+	# value <- True if work area is type 2
 	cycles = dict()
 
 	for record in _list:
@@ -57,20 +58,29 @@ def walking_json(json_file_name='./data/data2.json'):
 		else:
 			cycles[record["cycle"]] = record["zone"] in ["AW2", "BW2"]
 
+		# El promedio de tiempo en faena F
+		if record["zone"] == "F":
+			F_show_ups += 1
+			F_total_seconds += seconds_elapsed(from_str_to_datetime(record["dt_in"]), 
+												from_str_to_datetime(record["dt_out"]))
+
 	A_waiting_average = float(A_waiting_seconds) / A_waiting_show_ups
 	B_waiting_average = float(B_waiting_seconds) / B_waiting_show_ups
 
 	cycles_w2 = sum(1 for value in cycles.values() if value)
 	cycles_w2_percentage = float(cycles_w2)*100/len(cycles)
 
-	return A_waiting_average, B_waiting_average, cycles_w2_percentage
+	F_average = float(F_total_seconds) / F_show_ups
+
+	return A_waiting_average, B_waiting_average, cycles_w2_percentage, F_average
 
 def main():
 
-	A_waiting_average, B_waiting_average, cycles_w2_percentage = walking_json()
+	A_waiting_average, B_waiting_average, cycles_w2_percentage, F_average = walking_json()
 	print(f"{A_waiting_average} seconds")
 	print(f"{B_waiting_average} seconds")
 	print(f"{cycles_w2_percentage} %")
+	print(f"{F_average/60} minutes")
 
 
 if __name__ == '__main__':
