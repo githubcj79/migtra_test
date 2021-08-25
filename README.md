@@ -1,5 +1,5 @@
 # migtra_test
-Python test for Mitgra
+Python test for Migtra
 
 This repository have the solution for the requests presented by Migtra.
 The data files given are not part of this repository.
