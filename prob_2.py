@@ -11,14 +11,14 @@ from datetime import datetime
 
 import json
 
-def from_str_to_datetime():
-	# str_in = "2019-01-01T00:08:55"
-	str_in = "2019-01-01T02:08:55"
-	date_ = datetime.strptime(str_in, '%Y-%m-%dT%H:%M:%S')
-	str_out = date_.strftime("'%b %d %Y %I:%M%p'")
+def from_str_to_datetime(str_in):
+	return datetime.strptime(str_in, '%Y-%m-%dT%H:%M:%S')
 
-	print(f"{str_in}")
-	print(f"{str_out}")
+def seconds_elapsed(datetime_1, datetime_2):
+	'''
+	It is taken datetime_2 > datetime_1.
+	'''
+	return (datetime_2 - datetime_1).total_seconds()
 
 
 def walking_json(json_file_name='./data/data2.json'):
@@ -33,7 +33,10 @@ def walking_json(json_file_name='./data/data2.json'):
 
 def main():
 	# walking_json()
-	from_str_to_datetime()
+	# from_str_to_datetime()
+	date_1 = from_str_to_datetime("2019-01-01T00:05:59")
+	date_2 = from_str_to_datetime("2019-01-01T00:08:55")
+	print(f"seconds elapsed: {seconds_elapsed(date_1, date_2)}")
 
 
 if __name__ == '__main__':
